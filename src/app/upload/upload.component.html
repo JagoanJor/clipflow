@@ -1,0 +1,166 @@
+<div class="upload-page">
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <img src="assets/Neon Ribbon Play Emblem.png" alt="ClipFlow Logo" class="logo" />
+
+            <span>ClipFlow</span>
+
+        </div>
+
+        <button type="button" class="account-button">
+            <span class="avatar">
+                U
+            </span>
+
+            <span class="account-name">
+                Account
+            </span>
+
+            <span class="chevron">
+                ˅
+            </span>
+        </button>
+
+    </header>
+
+
+    <main class="upload-container">
+
+        <section class="intro">
+
+            <span class="eyebrow">
+                AI VIDEO CLIPPER
+            </span>
+
+            <h1>
+                Create your clips
+            </h1>
+
+            <p>
+                Upload your video and let ClipFlow find the most engaging
+                moments for short-form content.
+            </p>
+
+        </section>
+
+
+        <!-- EMPTY STATE -->
+
+        <section *ngIf="!selectedFile" class="drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" (click)="openFilePicker()">
+
+            <input #fileInput type="file" accept="video/*" hidden (change)="onFileSelected($event)">
+
+            <div class="upload-icon">
+                ↑
+            </div>
+
+            <h2>
+                Drop your video here
+            </h2>
+
+            <p>
+                or choose a video from your device
+            </p>
+
+            <button type="button" class="choose-button" (click)="$event.stopPropagation(); openFilePicker()">
+                Choose Video
+            </button>
+
+            <span class="supported">
+                MP4, MOV, WebM · Maximum 2 GB
+            </span>
+
+        </section>
+
+
+        <!-- SELECTED VIDEO -->
+
+        <section *ngIf="selectedFile" class="video-card">
+
+            <div class="video-preview">
+
+                <video *ngIf="videoUrl" [src]="videoUrl" controls></video>
+
+            </div>
+
+
+            <div class="video-info">
+
+                <div class="file-details">
+
+                    <div class="file-icon">
+                        ▶
+                    </div>
+
+                    <div class="file-text">
+
+                        <strong>
+                            {{ selectedFile.name }}
+                        </strong>
+
+                        <span>
+                            {{ getFileSize() }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <button type="button" class="remove-button" [disabled]="isUploading" (click)="removeFile()">
+                    Remove
+                </button>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div *ngIf="isUploading" class="progress-section">
+
+                <div class="progress-header">
+
+                    <span>
+                        Uploading video...
+                    </span>
+
+                    <span>
+                        {{ uploadProgress }}%
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div class="progress-bar" [style.width.%]="uploadProgress"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <button *ngIf="!isUploading" type="button" class="analyze-button" (click)="startUpload()">
+                Analyze Video
+            </button>
+
+        </section>
+
+
+        <div class="privacy-note">
+
+            <span class="lock-icon">
+                ◇
+            </span>
+
+            Your video is securely processed and stored in your account.
+
+        </div>
+
+    </main>
+
+</div>
