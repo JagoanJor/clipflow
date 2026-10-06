@@ -15,6 +15,168 @@
   border-radius: 15px;
 }
 
+.drive-connect-card {
+  width: 100%;
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: clamp(2rem, 5vw, 4rem);
+
+  text-align: center;
+
+  border: 1px dashed #3f3f46;
+  border-radius: 1rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(124, 58, 237, 0.035),
+      rgba(255, 255, 255, 0.01)
+    );
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    border-color: #8b5cf6;
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(124, 58, 237, 0.1),
+        rgba(255, 255, 255, 0.02)
+      );
+  }
+}
+
+.drive-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: #f1f3f4;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.drive-connect-card h2 {
+  margin: 0 0 0.75rem;
+}
+
+.drive-connect-card p {
+  max-width: 32rem;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+.connect-button {
+  width: 100%;
+  max-width: 7rem;
+
+  min-height: 2.35rem;
+
+  padding: 0.6rem 1.1rem;
+
+  border: 0;
+  border-radius: 0.55rem;
+
+  background: #ffffff;
+  color: #111111;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s,
+    background 0.2s;
+
+  &:hover {
+    background: #f4f4f5;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.connect-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.drive-connected {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.drive-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.75rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.status-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.drive-status-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.drive-status-text strong {
+  color: #166534;
+}
+
+.drive-status-text span {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.drive-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+
+  margin: 0 auto 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #3f3f46;
+  border-radius: 0.85rem;
+
+  background: #18181f;
+
+  color: #a78bfa;
+
+  font-size: 1.4rem;
+
+  box-shadow:
+    0 0.75rem 2rem rgba(0, 0, 0, 0.2);
+}
+
 .upload-page {
   width: 100%;
   min-height: 100dvh;

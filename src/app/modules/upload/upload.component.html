@@ -47,10 +47,67 @@
         </section>
 
 
+        <!-- GOOGLE DRIVE NOT CONNECTED -->
+
+        <section *ngIf="!isGoogleDriveConnected" class="drive-connect-card">
+
+            <img src="assets/Google Drive Logo.png" alt="Google Drive" class="google-drive-icon" />
+
+            <h2>
+                Connect Google Drive
+            </h2>
+
+            <p>
+                Connect your Google Drive before uploading your video.
+                Your video will be securely stored in your Drive.
+            </p>
+
+            <button type="button" class="connect-button" [disabled]="isConnectingGoogleDrive"
+                (click)="connectGoogleDrive()">
+
+                <span *ngIf="!isConnectingGoogleDrive">
+                    Connect
+                </span>
+
+                <span *ngIf="isConnectingGoogleDrive">
+                    Connecting...
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <!-- GOOGLE DRIVE CONNECTED -->
+
+        <section *ngIf="isGoogleDriveConnected" class="drive-connected">
+
+            <div class="drive-status">
+
+                <span class="status-dot"></span>
+
+                <div class="drive-status-text">
+
+                    <strong>
+                        Google Drive Connected
+                    </strong>
+
+                    <span *ngIf="googleDriveUser?.emailAddress">
+                        {{ googleDriveUser.emailAddress }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
         <!-- EMPTY STATE -->
 
-        <section *ngIf="!selectedFile" class="drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
-            (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" (click)="openFilePicker()">
+        <section *ngIf="isGoogleDriveConnected && !selectedFile" class="drop-zone" [class.dragging]="isDragging"
+            (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+            (click)="openFilePicker()">
 
             <input #fileInput type="file" accept="video/*" hidden (change)="onFileSelected($event)">
 
@@ -79,7 +136,7 @@
 
         <!-- SELECTED VIDEO -->
 
-        <section *ngIf="selectedFile" class="video-card">
+        <section *ngIf="isGoogleDriveConnected && selectedFile" class="video-card">
 
             <div class="video-preview">
 

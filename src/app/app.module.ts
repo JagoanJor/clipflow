@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { LoginComponent } from './login/login.component';
-import { UploadComponent } from './upload/upload.component';
+import { LoginComponent } from './modules/login/login.component';
+import { UploadComponent } from './modules/upload/upload.component';
 
 @NgModule({
   declarations: [
