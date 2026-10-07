@@ -3,26 +3,85 @@
     <header class="topbar">
 
         <div class="brand">
-
             <img src="assets/Neon Ribbon Play Emblem.png" alt="ClipFlow Logo" class="logo" />
-
             <span>ClipFlow</span>
-
         </div>
 
-        <button type="button" class="account-button">
-            <span class="avatar">
-                U
-            </span>
+        <div #profileWrapper class="profile-wrapper">
 
-            <span class="account-name">
-                Account
-            </span>
+            <button type="button" class="account-button" (click)="toggleProfileDropdown()">
+                <span class="avatar">U</span>
 
-            <span class="chevron">
-                ˅
-            </span>
-        </button>
+                <span class="account-name">Account</span>
+
+                <span class="chevron" [class.open]="isProfileDropdownOpen">
+                    ˅
+                </span>
+            </button>
+
+            <div *ngIf="isProfileDropdownOpen" class="profile-dropdown">
+
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        U
+                    </div>
+
+                    <div class="profile-info">
+                        <strong>Account</strong>
+                        <span>ClipFlow User</span>
+                    </div>
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <!-- Google Drive -->
+                <div class="profile-section">
+
+                    <div class="profile-section-header">
+                        <span class="profile-section-title">
+                            Google Drive
+                        </span>
+
+                        <span *ngIf="isGoogleDriveConnected" class="drive-connected-badge">
+                            Connected
+                        </span>
+
+                        <span *ngIf="!isGoogleDriveConnected" class="drive-disconnected-badge">
+                            Not connected
+                        </span>
+                    </div>
+
+                    <div *ngIf="isGoogleDriveConnected" class="drive-profile-info">
+
+                        <img src="assets/Google Drive Logo.png" alt="Google Drive" class="profile-drive-icon" />
+
+                        <div class="drive-profile-text">
+                            <strong>Google Drive Connected</strong>
+
+                            <span *ngIf="googleDriveUser?.emailAddress">
+                                {{ googleDriveUser.emailAddress }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <button *ngIf="!isGoogleDriveConnected" type="button" class="profile-connect-button"
+                        [disabled]="isConnectingGoogleDrive" (click)="connectGoogleDrive(); $event.stopPropagation()">
+                        {{ isConnectingGoogleDrive ? 'Connecting...' : 'Connect Google Drive' }}
+                    </button>
+
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <button type="button" class="profile-menu-item" (click)="toggleProfileDropdown()">
+                    <span>Account Settings</span>
+                    <span>›</span>
+                </button>
+
+            </div>
+
+        </div>
 
     </header>
 
@@ -77,24 +136,89 @@
 
         </section>
 
+        <!-- GOOGLE DRIVE VIDEOS -->
 
-        <!-- GOOGLE DRIVE CONNECTED -->
+        <section *ngIf="isGoogleDriveConnected" class="drive-videos">
 
-        <section *ngIf="isGoogleDriveConnected" class="drive-connected">
+            <div class="drive-videos-header">
 
-            <div class="drive-status">
-
-                <span class="status-dot"></span>
-
-                <div class="drive-status-text">
-
-                    <strong>
-                        Google Drive Connected
-                    </strong>
-
-                    <span *ngIf="googleDriveUser?.emailAddress">
-                        {{ googleDriveUser.emailAddress }}
+                <div>
+                    <span class="eyebrow">
+                        GOOGLE DRIVE
                     </span>
+
+                    <h2>
+                        Your Videos
+                    </h2>
+                </div>
+
+                <button type="button" class="refresh-drive-button" (click)="loadGoogleDriveVideos()"
+                    [disabled]="isLoadingDriveVideos">
+                    {{ isLoadingDriveVideos ? 'Loading...' : 'Refresh' }}
+                </button>
+
+            </div>
+
+
+            <!-- LOADING -->
+
+            <div *ngIf="isLoadingDriveVideos" class="drive-videos-loading">
+                Loading your Google Drive videos...
+            </div>
+
+
+            <!-- EMPTY -->
+
+            <div *ngIf="!isLoadingDriveVideos && googleDriveVideos.length === 0" class="drive-videos-empty">
+
+                <span class="empty-icon">
+                    🎬
+                </span>
+
+                <strong>
+                    No videos found
+                </strong>
+
+                <span>
+                    No video files were found in your Google Drive.
+                </span>
+
+            </div>
+
+
+            <!-- VIDEO LIST -->
+
+            <div *ngIf="!isLoadingDriveVideos && googleDriveVideos.length > 0" class="drive-video-list">
+
+                <div *ngFor="let video of googleDriveVideos" class="drive-video-item">
+
+                    <div class="drive-video-icon">
+                        ▶
+                    </div>
+
+                    <div class="drive-video-info">
+
+                        <strong>
+                            {{ video.name }}
+                        </strong>
+
+                        <span>
+                            {{ video.mimeType }}
+                        </span>
+
+                    </div>
+
+                    <div class="drive-video-actions">
+
+                        <button type="button" class="preview-video-button" (click)="previewDriveVideo(video, $event)">
+                            Preview
+                        </button>
+
+                        <button type="button" class="use-video-button" (click)="selectDriveVideo(video)">
+                            Use Video
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -220,4 +344,33 @@
 
     </main>
 
+    <div *ngIf="isVideoPreviewOpen && previewVideo" class="video-preview-overlay" (click)="closeVideoPreview()">
+
+        <div class="video-preview-modal" (click)="$event.stopPropagation()">
+
+            <div class="video-preview-header">
+
+                <div class="video-preview-title">
+                    <strong>
+                        {{ previewVideo.name }}
+                    </strong>
+
+                    <span>
+                        {{ previewVideo.mimeType }}
+                    </span>
+                </div>
+
+                <button type="button" class="video-preview-close" (click)="closeVideoPreview()">
+                    ×
+                </button>
+
+            </div>
+
+            <div class="video-preview-content">
+                <video *ngIf="previewVideoUrl" [src]="previewVideoUrl" controls autoplay playsinline></video>
+            </div>
+
+        </div>
+
+    </div>
 </div>

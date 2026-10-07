@@ -9,7 +9,7 @@ export class GoogleDriveService {
 
     private clientId = '267662789419-1jac01bcdj4teb734gd8k5oekq4pop2m.apps.googleusercontent.com';
 
-    private scope = 'https://www.googleapis.com/auth/drive.file';
+    private scope = 'https://www.googleapis.com/auth/drive.readonly';
 
     private accessToken: string | null = null;
 
@@ -255,5 +255,73 @@ export class GoogleDriveService {
 
     getAccessToken(): string | null {
         return this.accessToken;
+    }
+
+    async getVideoFiles(): Promise<any[]> {
+
+        if (!this.accessToken) {
+            throw new Error('Google Drive is not connected.');
+        }
+
+        const params = new URLSearchParams({
+            q: "mimeType contains 'video/' and trashed = false",
+            fields: 'files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink)',
+            orderBy: 'modifiedTime desc',
+            pageSize: '100'
+        });
+
+        const response = await fetch(
+            `https://www.googleapis.com/drive/v3/files?${params.toString()}`,
+            {
+                method: 'GET',
+
+                headers: {
+                    Authorization:
+                        `Bearer ${this.accessToken}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to get Google Drive videos: ${response.status}`
+            );
+        }
+
+        const data = await response.json();
+
+        return data.files ?? [];
+    }
+
+    async getVideoBlob(fileId: string): Promise<Blob> {
+        if (!this.accessToken) {
+            throw new Error('Google Drive is not connected.');
+        }
+
+        const response = await fetch(
+            `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${this.accessToken}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.text();
+
+            console.error(
+                'Google Drive video download error:',
+                response.status,
+                error
+            );
+
+            throw new Error(
+                `Failed to load Google Drive video: ${response.status}`
+            );
+        }
+
+        return await response.blob();
     }
 }
